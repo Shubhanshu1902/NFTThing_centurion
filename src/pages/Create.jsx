@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Container, Row, Col } from "reactstrap";
+import { Container, Row, Col, Button } from "reactstrap";
 import CommonSection from "../components/ui/Common-section/CommonSection";
 import NftCard from "../components/ui/Nft-card/NftCard";
 import img from "../assets/images/img-01.jpg";
@@ -85,6 +85,13 @@ const Create = () => {
                       placeholder="Enter description"
                       className="w-100"
                     ></textarea>
+                  </div>
+                  <div className="form__input">
+                    
+                    <Button onClick={()=> {}}>
+                      <label htmlFor="">Submit form</label>
+
+                    </Button>
                   </div>
                 </form>
               </div>
