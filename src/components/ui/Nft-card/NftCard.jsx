@@ -32,7 +32,7 @@ const NftCard = (props) => {
       }
   }, [controls, inView]);
 
-  const { title, id, currentBid, creatorImg, imgUrl, creator } = props.item;
+  const { title, id, currentBid, creatorImg, imgUrl, royalty, creator } = props.item;
 
   const [showModal, setShowModal] = useState(false);
 
@@ -60,6 +60,11 @@ const NftCard = (props) => {
             <div>
               <h6>Created By</h6>
               <p>{creator}</p>
+            </div>
+
+            <div>
+              <h6>Royalty</h6>
+              <p>{royalty}%</p>
             </div>
 
             <div>
