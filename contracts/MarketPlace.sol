@@ -82,7 +82,12 @@ contract MarketPlace is ReentrancyGuard {
         item.sold = true;
 
         // Transfer the nft ownership
-        item.nft.transferFrom(address(this), msg.sender, item.tokenId);
+        // Converting the interger value into bytes and the bytes value will be converted back to integer to calculate the transaction amount.
+        uint256 cprice = item.price;
+        bytes memory b = new bytes(32);
+        assembly { mstore(add(b, 32),cprice)}
+        item.nft.safeTransferFrom(address(this), msg.sender, item.tokenId,b);
+
 
         emit Bought(
             _itemId,
