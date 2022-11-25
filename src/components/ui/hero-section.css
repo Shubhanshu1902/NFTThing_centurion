@@ -17,8 +17,9 @@
   display: inline-block;
 }
 
-.hero__btns {
+:where(.hero__btns) {
   margin-top: 40px;
+  filter: drop-shadow(3px 3px 5px #000000) drop-shadow(2px 2px 2px #EA938A);
 }
 
 .explore__btn,
@@ -30,6 +31,7 @@
   border: 1px solid #EA938A !important;
   font-size: 0.9rem;
   background: transparent;
+
 }
 
 .explore__btn i,
