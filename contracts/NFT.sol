@@ -6,19 +6,19 @@ import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
 contract NFT is ERC721URIStorage {
     uint public tokenCount;
+    
     address public artist;
     address public txFeeToken;
     uint public royalitypercentage;
     mapping(address => bool) public excludedlist;
 
     constructor (
-        address _artist,
-        address _txFeeToken,
+        // address _txFeeToken,
         uint _royalitypercentage
     )
     ERC721("Genshi_ NFT","Genshi_") {
-        artist = _artist;
-        txFeeToken = _txFeeToken;
+        artist = msg.sender;
+        // txFeeToken = _txFeeToken;
         royalitypercentage = _royalitypercentage;
         excludedlist[artist] = true;
     }
