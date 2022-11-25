@@ -51,7 +51,7 @@
 
 .singleNft-btn {
   padding: 8px 25px;
-  background: #5142fc;
+  background: #ffffff;
   border: none;
   outline: none;
   border-radius: 50px;
@@ -73,7 +73,7 @@
 }
 
 .singleNft-btn:hover a {
-  color: #5142fc;
+  color: #ffffff;
 }
 
 .singleNft-btn i {
@@ -81,7 +81,7 @@
 }
 
 .singleNft-btn:hover i {
-  color: #5142fc;
+  color: #ffffff;
 }
 
 @media only screen and (max-width: 992px) {

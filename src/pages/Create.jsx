@@ -47,9 +47,16 @@ const Create = () => {
                     />
                   </div>
 
-                  <div className="form__input">
-                    <label htmlFor="">Minimum Bid</label>
-                    <input type="number" placeholder="Enter minimum bid" />
+                  <div className=" d-flex align-items-center gap-4">
+                    <div className="form__input w-50">
+                      <label htmlFor="">Minimum Bid</label>
+                      <input type="number" placeholder="Enter minimum bid" />
+                    </div>
+
+                    <div className="form__input w-50">
+                      <label htmlFor="">Set Royalty</label>
+                      <input type="number" min="1" max="100" id="myPercent" placeholder="Set royalty" />
+                    </div>
                   </div>
 
                   <div className=" d-flex align-items-center gap-4">

@@ -7,13 +7,13 @@
 }
 
 body {
-  background: #14141f !important;
+  background: #1C1C1E !important;
   font-family: "Roboto", sans-serif;
 }
 
 h1,
 h2 {
-  color: #fff;
+  color: #DCDCDD;
   font-weight: 500;
   font-size: 2rem;
 }
@@ -21,7 +21,7 @@ h2 {
 p {
   font-weight: 400;
   font-size: 1rem;
-  color: rgba(255, 255, 255, 0.772);
+  color: #99999A;
 
   line-height: 35px;
 }
@@ -50,10 +50,10 @@ footer {
 
 ::-webkit-scrollbar {
   width: 10px;
-  background: #343444;
+  background: #3D3D3D;
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 2em;
-  background: linear-gradient(-45deg, #e250e5, #4b50e6, #e250e5, #4b50e6);
+  background: #EA938A;
 }
