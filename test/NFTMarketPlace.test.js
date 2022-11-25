@@ -15,7 +15,7 @@ describe("NFTMarketPlace", async () => {
         // Get signers
         [deployer, addr1, addr2, ...addrs] = await ethers.getSigners();
         // Deploy Contracts
-        nft = await NFT.deploy();
+        nft = await NFT.deploy(addr1.getAddress(),  10);
         marketplace = await MARKETPLACE.deploy(feepercent);
     });
 
