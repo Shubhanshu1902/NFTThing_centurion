@@ -9,8 +9,8 @@
 }
 
 .header__shrink {
-  background: #14141f;
-  box-shadow: 2px 2px 4px -2px #e250e5;
+  background: #28282A;
+  box-shadow: 2px 2px 4px -2px #EA938A;
 }
 
 .navigation {
@@ -28,19 +28,19 @@
 
 .nav__item a {
   text-decoration: none;
-  color: #fff;
+  color: #DCDCDD;
 }
 
 .nav__item a:hover {
-  color: #fff;
+  color: #DCDCDD;
 }
 
 .active {
-  color: #e250e5 !important;
+  color: #EA938A !important;
 }
 
 .logo h2 {
-  background: linear-gradient(-45deg, #e250e5, #4b50e6, #e250e5, #4b50e6);
+  background: #DCDCDD;
   background-size: 100% 100%;
   background-clip: text;
   -webkit-text-stroke: 3px transparent;
@@ -50,7 +50,7 @@
 
 .nav__right .btn {
   padding: 7px 25px;
-  border: 1px solid #5142fc;
+  border: 1px solid #EA938A;
   border-radius: 50px;
 }
 
