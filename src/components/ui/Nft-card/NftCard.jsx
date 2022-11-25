@@ -1,17 +1,47 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import { Link } from "react-router-dom";
-
+import { useAnimation, motion } from "framer-motion/dist/es/index";
+import { useInView } from "react-intersection-observer";
 import "./nft-card.css";
 
 import Modal from "../Modal/Modal";
 
+
+const nftcardvariant={
+  hidden: {
+      opacity: 0,
+      y : +50
+  },
+  visible: {
+      opacity: 1,
+      y:0,
+      transition: {
+          duration: 1
+      },
+  }
+}
+
+
 const NftCard = (props) => {
+
+  const controls = useAnimation();
+  const [ref, inView] = useInView();
+  useEffect(() => {
+      if (inView) {
+      controls.start("visible");
+      }
+  }, [controls, inView]);
+
   const { title, id, currentBid, creatorImg, imgUrl, creator } = props.item;
 
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <div className="single__nft__card">
+    <motion.div className="single__nft__card" 
+    variants={nftcardvariant} 
+    ref={ref}
+    animate={controls}
+    initial="hidden">
       <div className="nft__img">
         <img src={imgUrl} alt="" className="w-100" />
       </div>
@@ -54,7 +84,7 @@ const NftCard = (props) => {
           </span>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
