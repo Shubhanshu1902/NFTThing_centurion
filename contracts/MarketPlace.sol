@@ -15,15 +15,15 @@ contract MarketPlace is ReentrancyGuard {
     struct Item {
         uint itemId; //Id of the item
         IERC721 nft; //instance of nft contract
-        uint tokenId;  //Token Id 
+        uint tokenId; //Token Id
         uint price; //price of the nft
         address payable seller; // Seller address
-        bool sold;  // True if sold else false
+        bool sold; // True if sold else false
     }
 
     mapping(uint => Item) public items;
 
-    //indexed will allow us to search for offered event 
+    //indexed will allow us to search for offered event
     //using nft and seller
     event Offered(
         uint itemId,
@@ -33,13 +33,26 @@ contract MarketPlace is ReentrancyGuard {
         address indexed seller
     );
 
+    event Bought(
+        uint itemId,
+        address indexed nft,
+        uint tokenId,
+        uint price,
+        address indexed seller,
+        address indexed buyer
+    );
+
     constructor(uint _feePercent) {
         feeAccount = payable(msg.sender);
         feePercent = _feePercent;
     }
 
-    function createItem(IERC721 _nft,uint _tokenId,uint _price) external nonReentrant{
-        require(_price > 0,"Price must be greater than 0");
+    function createItem(
+        IERC721 _nft,
+        uint _tokenId,
+        uint _price
+    ) external nonReentrant {
+        require(_price > 0, "Price must be greater than 0");
         itemCount++;
         _nft.transferFrom(msg.sender, address(this), _tokenId);
 
@@ -52,7 +65,36 @@ contract MarketPlace is ReentrancyGuard {
             false
         );
 
-        emit Offered(itemCount,address(_nft), _tokenId, _price, msg.sender);
+        emit Offered(itemCount, address(_nft), _tokenId, _price, msg.sender);
+    }
 
+    function purchaseItem(uint _itemId) external payable nonReentrant {
+        uint totalPrice = gettotalPrice(_itemId);
+        Item storage item = items[_itemId];
+        require(_itemId > 0 && _itemId <= itemCount, "Item does not exist");
+        require(msg.value >= totalPrice, "Money where");
+        require(!item.sold,"Item not for sale");
+
+   
+        item.seller.transfer(item.price);
+        feeAccount.transfer(totalPrice - item.price);
+
+        item.sold = true;
+
+        // Transfer the nft ownership
+        item.nft.transferFrom(address(this), msg.sender, item.tokenId);
+
+        emit Bought(
+            _itemId,
+            address(item.nft),
+            item.tokenId,
+            item.price,
+            item.seller,
+            msg.sender
+        );
+    }
+
+    function gettotalPrice(uint _itemId) public view returns (uint) {
+        return (items[_itemId].price * (100 + feePercent)) / 100;
     }
 }
