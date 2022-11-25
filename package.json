@@ -19,8 +19,8 @@
     "remixicon": "^2.5.0",
     "web-vitals": "^1.1.2",
     "framer-motion": "4.1.17",
-    "@react-three/drei": "9.43.3",
-    "@react-three/fiber": "8.9.1"
+    "@react-three/fiber": "7.0.6",
+    "@react-three/drei": "7.5.1"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -2,11 +2,16 @@ import React from "react";
 import { Container, Row, Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import "./hero-section.css";
+import { Canvas } from "@react-three/fiber";
+import { Suspense } from "react";
+import { Environment, OrbitControls } from "@react-three/drei";
+import { useGLTF, OrthographicCamera } from '@react-three/drei'
+import Model from "./model/Scene";
 
-import heroImg from "../../assets/images/hero.jpg";
 
 const HeroSection = () => {
   return (
+    
     <section className="hero__section">
       <Container>
         <Row>
@@ -36,9 +41,15 @@ const HeroSection = () => {
           </Col>
 
           <Col lg="6" md="6">
-            <div className="hero__img">
-              <img src={heroImg} alt="" className="w-100" />
-            </div>
+
+            <Canvas >
+            <mesh>
+              <boxGeometry />
+              <meshStandardMaterial color="#E45C9C" />
+            </mesh>
+            <ambientLight intensity={1.25}/>
+            <OrbitControls autoRotate />
+            </Canvas>
           </Col>
         </Row>
       </Container>
