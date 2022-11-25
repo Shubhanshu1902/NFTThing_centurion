@@ -44,6 +44,7 @@ describe("NFTMarketPlace", async () => {
             expect(await nft.tokenURI(2)).to.equal(URI);
         });
     });
+
     describe("Making Marketplace items", () => {
         beforeEach(async () => {
             // addr1 mints an nft
@@ -78,6 +79,7 @@ describe("NFTMarketPlace", async () => {
             ).to.be.revertedWith("Price must be greater than 0");
         });
     });
+    
     describe("Purchasing marketplace items", () => {
         let price = 2;
         let fee = (feepercent / 100) * price;
