@@ -1,13 +1,14 @@
 .all__category__filter select,
 .all__items__filter select,
 .filter__right select {
-  padding: 8px 25px;
+  padding: 8px 8px;
   font-size: 0.9rem;
-  color: #fff;
+  color: #EA938A;
   cursor: pointer;
-  border: none;
+
   outline: none;
-  background: #E45C9C;
+  background: none;
+  border-color: #EA938A;
   border-radius: 5px;
 }
 
