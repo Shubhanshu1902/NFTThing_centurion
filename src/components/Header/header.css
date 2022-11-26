@@ -9,7 +9,8 @@
 }
 
 .header__shrink {
-  background: #28282A;
+  background: #1C1C1E;
+  background-blend-mode: color;
   box-shadow: 2px 2px 4px -2px #EA938A;
 }
 
@@ -37,15 +38,6 @@
 
 .active {
   color: #EA938A !important;
-}
-
-.logo h2 {
-  background: #DCDCDD;
-  background-size: 100% 100%;
-  background-clip: text;
-  -webkit-text-stroke: 3px transparent;
-  -webkit-text-fill-color: #000000;
-  margin-bottom: 0;
 }
 
 .nav__right .btn {
