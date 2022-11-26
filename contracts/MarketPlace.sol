@@ -78,7 +78,7 @@ contract MarketPlace is ReentrancyGuard {
    
         item.seller.transfer(item.price);
         feeAccount.transfer(totalPrice - item.price);
-
+        
         item.sold = true;
 
         // Transfer the nft ownership
