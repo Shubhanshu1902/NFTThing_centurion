@@ -3,6 +3,8 @@ pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "./NFT.sol";
+import "hardhat/console.sol";
 
 contract MarketPlace is ReentrancyGuard {
     // Account which get fees
@@ -11,6 +13,9 @@ contract MarketPlace is ReentrancyGuard {
     uint public immutable feePercent;
     // Number of items
     uint public itemCount;
+
+    mapping(address => address[]) nft_owned;
+    mapping(address => address[]) nft_created;
 
     struct Item {
         uint itemId; //Id of the item
@@ -66,7 +71,10 @@ contract MarketPlace is ReentrancyGuard {
         );
 
         emit Offered(itemCount, address(_nft), _tokenId, _price, msg.sender);
+        nft_created[msg.sender].push(address(_nft));
     }
+
+    uint public royalty;
 
     function purchaseItem(uint _itemId) external payable nonReentrant {
         uint totalPrice = gettotalPrice(_itemId);
@@ -75,19 +83,24 @@ contract MarketPlace is ReentrancyGuard {
         require(msg.value >= totalPrice, "Money where");
         require(!item.sold,"Item not for sale");
 
-   
-        item.seller.transfer(item.price);
-        feeAccount.transfer(totalPrice - item.price);
-        
-        item.sold = true;
-
         // Transfer the nft ownership
         // Converting the interger value into bytes and the bytes value will be converted back to integer to calculate the transaction amount.
-        uint256 cprice = item.price;
-        bytes memory b = new bytes(32);
-        assembly { mstore(add(b, 32),cprice)}
-        item.nft.safeTransferFrom(address(this), msg.sender, item.tokenId,b);
+        address nftAddress = address(item.nft);
+        NFT nft_token = NFT(nftAddress);
 
+        address payable creator = nft_token.artist();
+        uint royalitypercentage = nft_token.royalitypercentage();
+
+        royalty = (item.price * royalitypercentage)/100;
+        uint fees = totalPrice - item.price;
+        item.price = item.price - royalty;
+        creator.transfer(royalty);
+        item.seller.transfer(item.price);
+        feeAccount.transfer(fees);
+        item.sold = true;   
+        uint price = msg.value - totalPrice;
+        payable(msg.sender).transfer(price);
+        item.nft.safeTransferFrom(address(this), msg.sender, item.tokenId);
 
         emit Bought(
             _itemId,
@@ -97,9 +110,21 @@ contract MarketPlace is ReentrancyGuard {
             item.seller,
             msg.sender
         );
+
+        nft_owned[msg.sender].push(address(item.nft));
+
     }
 
     function gettotalPrice(uint _itemId) public view returns (uint) {
         return (items[_itemId].price * (100 + feePercent)) / 100;
+    }
+
+    function getAllCreatedNFTs() public view returns(address[] memory){
+        return nft_created[msg.sender];
+    }
+
+    
+    function getAllOwnedNFTs() public view returns(address[] memory){
+        return nft_owned[msg.sender];
     }
 }
