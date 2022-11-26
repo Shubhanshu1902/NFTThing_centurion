@@ -1,10 +1,13 @@
-.single__nft__card {
+.single__nft__card2 {
   padding: 20px;
   background: #28282A;
   border-radius: 10px;
   transition: width 2s;
 }
-
+.single__nft__card2:hover {
+  scale: 1.05;
+  filter: drop-shadow(0 0 0.4rem #E45C9C);
+}
 @media only screen and (max-width: 992px) {
   .nft__title {
     font-size: 0.8rem !important;
