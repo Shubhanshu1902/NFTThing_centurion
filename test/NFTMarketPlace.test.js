@@ -55,7 +55,7 @@ describe("NFTMarketPlace", async () => {
     describe("Making Marketplace items", () => {
         beforeEach(async () => {
             // addr1 mints an nft
-            await nft.connect(ad dr1).mint(URI);
+            await nft.connect(addr1).mint(URI);
             // addr1 approves marketplace to sell nft
             await nft
                 .connect(addr1)
