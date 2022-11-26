@@ -11,6 +11,7 @@ contract NFT is ERC721URIStorage {
     address public txFeeToken;
     uint public royalitypercentage;
     mapping(address => bool) public excludedlist;
+    uint public balance;
 
     constructor (
         // address _txFeeToken,
@@ -28,19 +29,7 @@ contract NFT is ERC721URIStorage {
         excludedlist[excluded] = status;
     }
 
-//     function safeTransferFrom(
-//         address from,
-//         address to,
-//         uint256 tokenId,
-//         uint256 cprice
-//    ) public {
-//         if(excludedlist[from] == false) {
-//         _payTxFee(from,cprice);
-//         }
-//         safeTransferFrom(from, to, tokenId, '');
-//    }
-
-  function _payTxFee(address from,uint256 cprice) internal {
+  function _payTxFee(address from,uint256 cprice) internal{
     IERC20 token = IERC20(txFeeToken);
    // Modify the amount logic here
     uint256 amountval = (royalitypercentage/100)*(cprice);
@@ -48,21 +37,26 @@ contract NFT is ERC721URIStorage {
   }
 
 
-  function safeTransferFrom(
+  function safeTransfernew(
     address from,
     address to,
     uint256 tokenId,
     bytes memory _data
-  ) public override {
-    require(
-      _isApprovedOrOwner(_msgSender(), tokenId), 
-      'ERC721: transfer caller is not owner nor approved'
-    );
-    if(excludedlist[from] == false) {
-      _payTxFee(from,uint256(bytes32(_data)));
-    }
-    _safeTransfer(from, to, tokenId, _data);
+  ) public payable{
+   
   }
+    uint public royalityval; 
+receive ()payable external{
+    balance = msg.value;
+    uint royalityval = (royalitypercentage/100)*balance;    
+    payable(artist).transfer(msg.value);
+    // _safeTransfer(from, sender, tokenId, _data);
+    balance = 0;
+
+
+  //do nothing
+}
+
 
     // Minting an NFT, or non-fungible token, is publishing a unique
     // digital asset on a blockchain so that it can be bought, sold, and traded.
@@ -76,5 +70,3 @@ contract NFT is ERC721URIStorage {
         return tokenCount;
   }
 }
-
-
