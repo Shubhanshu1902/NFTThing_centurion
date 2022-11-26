@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { Container, Row, Col, Button } from "reactstrap";
 import CommonSection from "../components/ui/Common-section/CommonSection";
-import NftCard from "../components/ui/Nft-card/NftCard";
+import NftCard2 from "../components/ui/Nft-card2/NftCard2";
 // import img from "../assets/images/img-01.jpg";
 import avatar from "../assets/images/ava-01.png";
 import { NFT__DATA } from "../assets/data/data";
@@ -184,7 +184,7 @@ const Create = () => {
                         </Col>
                         <Col lg="3" md="4" sm="6">
                             <h5 className="mb-4 text-light">Preview Item</h5>
-                            <NftCard item={item} />
+                            <NftCard2 item={item} />
                         </Col>
                     </Row>
                 </Container>
