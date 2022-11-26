@@ -14,10 +14,14 @@ import ava03 from "../images/ava-03.png";
 import ava04 from "../images/ava-04.png";
 import ava05 from "../images/ava-05.png";
 import ava06 from "../images/ava-06.png";
+import React from "react";
+import { ErrorResponse } from "@remix-run/router";
 
-export const NFT__DATA = [
+
+
+export var NFT__DATA = [
   {
-    id: "01",
+    id: 1,
     title: "Travel Monkey Club",
     desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
     imgUrl: img01,
@@ -28,7 +32,7 @@ export const NFT__DATA = [
   },
 
   {
-    id: "02",
+    id: 2,
     title: "Sir Lion Swag",
     desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
     imgUrl: img02,
@@ -39,7 +43,7 @@ export const NFT__DATA = [
   },
 
   {
-    id: "03",
+    id: 3,
     title: "Civilian",
     desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
     imgUrl: img03,
@@ -50,7 +54,7 @@ export const NFT__DATA = [
   },
 
   {
-    id: "04",
+    id: 4,
     title: "Guard",
     desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
     imgUrl: img04,
@@ -61,7 +65,7 @@ export const NFT__DATA = [
   },
 
   {
-    id: "05",
+    id: 5,
     title: "Travel Monkey Club",
     desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
     imgUrl: img05,
@@ -72,7 +76,7 @@ export const NFT__DATA = [
   },
 
   {
-    id: "06",
+    id: 6,
     title: "Sir Lion Swag",
     desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
     imgUrl: img06,
@@ -83,7 +87,7 @@ export const NFT__DATA = [
   },
 
   {
-    id: "07",
+    id: 7,
     title: "Civilian",
     desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
     imgUrl: img07,
@@ -94,7 +98,7 @@ export const NFT__DATA = [
   },
 
   {
-    id: "08",
+    id: 8,
     title: "Guard",
     desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
     imgUrl: img08,
@@ -105,7 +109,7 @@ export const NFT__DATA = [
   },
 
   {
-    id: "09",
+    id: 9,
     title: "Travel Monkey Club",
     desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
     imgUrl: img09,
@@ -115,6 +119,12 @@ export const NFT__DATA = [
     royalty: 20,
   },
 ];
+
+// class data extends React.Component(){
+//   constructor(props){
+//     NFT__DATA.push(props)
+//   }
+// }
 
 export const SELLER__DATA = [
   {
@@ -261,3 +271,5 @@ export const SELLER__DATA = [
     twitUrl: "#",
   },
 ];
+
+// export default data
