@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Container, Row, Col, Button } from "reactstrap";
 import CommonSection from "../components/ui/Common-section/CommonSection";
 import NftCard from "../components/ui/Nft-card/NftCard";
-import img from "../assets/images/img-01.jpg";
+// import img from "../assets/images/img-01.jpg";
 import avatar from "../assets/images/ava-01.png";
 import { NFT__DATA } from "../assets/data/data";
 // import { create } from "ipfs-http-client";
@@ -32,7 +32,7 @@ const Create = () => {
     const [royalty, setRoyal] = useState("");
     const [title, setTitle] = useState("");
     const [desc, setDesc] = useState("");
-
+    const [selectedImage, setSelectedImage] = useState(null);
     var x = NFT__DATA.lastIndexOf();
     // var flag = 0;
 
@@ -40,7 +40,7 @@ const Create = () => {
         id: x + 2,
         title: title,
         desc: desc,
-        imgUrl: img,
+        imgUrl: (selectedImage) ? URL.createObjectURL(selectedImage) : "" ,
         creator: "Your Name",
         creatorImg: avatar,
         currentBid: 0,
@@ -70,7 +70,11 @@ const Create = () => {
                                         <label htmlFor="">Upload File</label>
                                         <input
                                             type="file"
+                                            accept="image/*"
                                             className="upload__input"
+                                            onChange={(event) => {
+                                                setSelectedImage(event.target.files[0]);
+                                            }}
                                         />
                                     </div>
 
