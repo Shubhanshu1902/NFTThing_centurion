@@ -12,6 +12,9 @@ contract MarketPlace is ReentrancyGuard {
     // Number of items
     uint public itemCount;
 
+    mapping(address => address[]) nft_owned;
+    mapping(address => address[]) nft_created;
+
     struct Item {
         uint itemId; //Id of the item
         IERC721 nft; //instance of nft contract
@@ -66,6 +69,7 @@ contract MarketPlace is ReentrancyGuard {
         );
 
         emit Offered(itemCount, address(_nft), _tokenId, _price, msg.sender);
+        nft_created[msg.sender].push(address(_nft));
     }
 
     function purchaseItem(uint _itemId) external payable nonReentrant {
@@ -97,9 +101,22 @@ contract MarketPlace is ReentrancyGuard {
             item.seller,
             msg.sender
         );
+
+        nft_owned[msg.sender].push(address(item.nft));
+
     }
 
     function gettotalPrice(uint _itemId) public view returns (uint) {
         return (items[_itemId].price * (100 + feePercent)) / 100;
     }
+
+    function getAllCreatedNFTs() public view returns(address[] memory){
+        return nft_created[msg.sender];
+    }
+
+    
+    function getAllOwnedNFTs() public view returns(address[] memory){
+        return nft_owned[msg.sender];
+    }
+
 }
