@@ -59,7 +59,7 @@ const HeroSection = () => {
             initial="hidden">
               <h2>
                 Buy, sell and mint NFTs
-                <span>with true Artist royalty</span>
+                <span>with True Artist royalty</span>
               </h2>
               <p>
                 We provide the artists with full control over the royalty fees on their minted NFTs. Start creating, start minting, start earning
