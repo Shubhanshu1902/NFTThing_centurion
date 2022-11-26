@@ -5,6 +5,7 @@ import CommonSection from "../components/ui/Common-section/CommonSection";
 import NftCard from "../components/ui/Nft-card/NftCard";
 import img from "../assets/images/img-01.jpg";
 import avatar from "../assets/images/ava-01.png";
+import { NFT__DATA } from "../assets/data/data";
 
 import "../styles/create-item.css";
 
@@ -18,15 +19,17 @@ import "../styles/create-item.css";
 //   currentBid: 7.89,
 //   royalty: 0,
 // };
-
 const Create = () => {
   const [r, setRoyal] = useState('');
   const [t, setTitle] = useState('');
   const [d, setDesc] = useState('');
 
+  var x = NFT__DATA.lastIndexOf()
+  var flag = 0;
+
 
   var item = {
-    id: "",
+    id: x + 2,
     title: t,
     desc: d,
     imgUrl: img,
@@ -35,6 +38,10 @@ const Create = () => {
     currentBid: 0,
     royalty: r,
   };
+
+  function append() {
+    NFT__DATA.push(item);
+  }
 
   return (
     <>
@@ -107,9 +114,8 @@ const Create = () => {
                   </div>
                   <div className="form__input">
                     
-                    <Button onClick={()=> {}}>
+                    <Button onClick={append}>
                       <label htmlFor="">Mint NFT</label>
-
                     </Button>
                   </div>
                 </form>
