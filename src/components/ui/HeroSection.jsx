@@ -43,7 +43,7 @@ const HeroSection = () => {
           <Col lg="6" md="6">
 
             <Canvas >
-            <mesh>
+            <mesh scale={3}>
               <boxGeometry />
               <meshStandardMaterial color="#E45C9C" />
             </mesh>
