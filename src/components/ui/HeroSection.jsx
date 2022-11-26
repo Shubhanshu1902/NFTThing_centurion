@@ -5,6 +5,7 @@ import { useAnimation, motion } from "framer-motion/dist/es/index";
 import { useInView } from "react-intersection-observer";
 import "./hero-section.css";
 import { Canvas } from "@react-three/fiber";
+// import CanvasResize from "react-canvas-resize";
 import { Suspense } from "react";
 import { Environment, OrbitControls } from "@react-three/drei";
 import { useGLTF, OrthographicCamera } from '@react-three/drei'
@@ -50,19 +51,20 @@ const HeroSection = () => {
     
     <section className="hero__section">
       <Container>
-        <Row>
-          <Col lg="6" md="6">
+        <div class="row">
+          <div class = "col-lg-6">
             <motion.div className="hero__content"
             variants={textpopvariant} 
             ref={ref}
             animate={controls}
             initial="hidden">
               <h2>
-                Discover rare digital art and collect
-                <span>sell extraordinary</span> NFTs
+                Buy, sell and mint NFTs
+                <span>with true Artist royalty</span>
               </h2>
               <p>
-                vaibhav put some text here!
+                We provide the artists with full control over the royalty fees on their minted NFTs. Start creating, start minting, start earning
+                <span> Now</span>.
               </p>
 
               <div className="hero__btns d-flex align-items-center gap-4">
@@ -76,27 +78,26 @@ const HeroSection = () => {
                 </button>
               </div>
             </motion.div>
-          </Col>
-
-          <Col lg="6" md="6">
+          </div>
+          <div class = "col-xl-6">
             <motion.div
             variants={cubepopvariant} 
             ref={ref}
             animate={controls}
             initial="hidden"
             >
-            <Canvas >
+            <Canvas>
             <mesh scale={3}>
-              <boxGeometry />
-              <meshStandardMaterial color="#E45C9C" />
+              <sphereGeometry radius={40} segments={10} rings={10} />
+              <meshNormalMaterial color="#E45C9C" wireframe={true} />
             </mesh>
-            <ambientLight intensity={1.25}/>
+            <ambientLight intensity={1.1}/>
+            <directionalLight color={0x89ff45} intensity={1.5}/>
             <OrbitControls autoRotate autoRotateSpeed={3}/>
             </Canvas>
             </motion.div>
-            
-          </Col>
-        </Row>
+            </div>
+          </div>
       </Container>
     </section>
   );
