@@ -2,6 +2,10 @@
   background: #28282A;
   border-radius: 5px;
   padding: 30px;
+  filter: drop-shadow(5px 5px 5px #000000);
+}
+.single__step__item:hover {
+  scale: 1.1;
 }
 
 .step__title {
