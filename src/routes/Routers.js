@@ -6,6 +6,7 @@ import Home from "../pages/Home";
 import Market from "../pages/Market";
 import Create from "../pages/Create";
 import Contact from "../pages/Contact";
+import Profile from "../pages/Profile"
 
 import Wallet from "../pages/Wallet";
 import NftDetails from "../pages/NftDetails";
@@ -16,6 +17,7 @@ const Routers = () => {
       <Route path="/" element={<Navigate to="/home" />} />
       <Route path="/home" element={<Home />} />
       <Route path="/market" element={<Market />} />
+      <Route path="/profile" element={<Profile />} />
       <Route path="/create" element={<Create />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/wallet" element={<Wallet />} />
