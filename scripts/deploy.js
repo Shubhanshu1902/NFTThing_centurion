@@ -7,10 +7,10 @@ async function main() {
     console.log("Account balance:", (await deployer.getBalance()).toString());
 
     // deploy contracts here:
-
+    let royaltyPercent = 10
 	// Deploying NFT contract
 	const NFT = await ethers.getContractFactory("NFT")
-	const nft = await NFT.deploy()
+	const nft = await NFT.deploy(royaltyPercent)
 
 	console.log("NFT Contract hosted at",nft.address)
     // For each contract, pass the deployed contract and name to this function to save a copy of the contract ABI and address to the front end.
