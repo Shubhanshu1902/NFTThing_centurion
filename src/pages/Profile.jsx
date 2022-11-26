@@ -47,7 +47,9 @@ const Profile = (props) => {
       <section>
       
         <Container>
-            <h1>my Created nfts</h1>
+          <Col lg="12" className="mb-4">
+            <h3 className="step__title">Created NFTs</h3>
+          </Col>
           <Row>
             
             <Col lg="12" className="mb-5">
@@ -73,7 +75,9 @@ const Profile = (props) => {
         </Container>
 
         <Container>
-            <h1>my Owned nfts</h1>
+          <Col lg="12" className="mb-4">
+            <h3 className="step__title">Owned NFTs</h3>
+          </Col>
           <Row>
             
             <Col lg="12" className="mb-5">

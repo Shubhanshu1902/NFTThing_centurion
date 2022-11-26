@@ -31,7 +31,7 @@
 
 :where(.hero__btns) {
   margin-top: 40px;
-  filter: drop-shadow(3px 3px 5px #000000) drop-shadow(2px 2px 2px #EA938A);
+  filter: drop-shadow(5px 5px 5px #000000);
 }
 
 .explore__btn,
@@ -42,7 +42,7 @@
   border-radius: 50px !important;
   border: 1px solid #EA938A !important;
   font-size: 0.9rem;
-  background: transparent;
+  background: #1C1C1E;
 
 }
 
