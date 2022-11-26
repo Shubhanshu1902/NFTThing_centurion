@@ -1,59 +1,187 @@
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+const { expect } = require("chai");
+const { ethers } = require("hardhat");
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+const toWei = num => ethers.utils.parseEther(num.toString());
+const fromWei = num => ethers.utils.formatEther(num);
 
-contract NFT is ERC721URIStorage {
-    uint public tokenCount;
+describe("NFTMarketPlace", async () => {
+    let deployer, addr1, addr2, nft, marketplace;
+    let feepercent = 1;
+    let addrs;
+    let royalty = 10;
+    let URI = "sample URI";
+    beforeEach(async () => {
+        const MARKETPLACE = await ethers.getContractFactory("MarketPlace");
+        const NFT = await ethers.getContractFactory("NFT");
+        // Get signers
+        [deployer, addr1, addr2, ...addrs] = await ethers.getSigners();
+        // Deploy Contracts
 
-    address payable[] public artist;
-    address payable public currentOwner;
-    // address public txFeeToken;
-    uint public royalitypercentage;
-    mapping(address => bool) public excludedlist;
-    uint public balance;
+        marketplace = await MARKETPLACE.deploy(feepercent);
+        nft = await NFT.deploy(royalty,marketplace.address);
+    });
 
-    constructor(
-        uint _royalitypercentage,
-        address marketplace
-    ) ERC721("Genshi_ NFT", "Genshi_") {
-        setApprovalForAll(marketplace,true);
-        artist.push(payable(msg.sender));
-        currentOwner = payable(msg.sender);
-        royalitypercentage = _royalitypercentage;
-        excludedlist[artist[0]] = true;
-    }
+    describe("Deployment", async () => {
+        it("Should track name and symbol of the nft collection", async () => {
+            expect(await nft.name()).to.equal("Genshi_ NFT");
+            expect(await nft.symbol()).to.equal("Genshi_");
+        });
 
-    function setOwner(address payable addr) external{
-        currentOwner = addr;
-    }
+        it("should track artist address and royalty %", async () => {
+            expect(await nft.getArtist_i(0)).to.equal(deployer.address);
+            expect(await nft.royalitypercentage()).to.equal(10);
+        });
 
-    function set_excluded(address excluded, bool status) external {
-        require(msg.sender == artist[0], "artist only");
-        excludedlist[excluded] = status;
-    }
+        it("Should track feeAccount and feePercent of the marketplace", async () => {
+            expect(await marketplace.feeAccount()).to.equal(deployer.address);
+            expect(await marketplace.feePercent()).to.equal(feepercent);
+        });
+    });
 
-    function changeRoyalty(uint royalty) external {
-        royalitypercentage = royalty;
-    }
+    describe("Minting NFTs", () => {
+        it("Should track each minted NFT", async () => {
+            await nft.connect(addr1).mint(URI);
+            expect(await nft.tokenCount()).to.equal(1);
+            expect(await nft.balanceOf(addr1.address)).to.equal(1);
+            expect(await nft.tokenURI(1)).to.equal(URI);
+            expect(await nft.royalitypercentage()).to.equal(10)
+            
+            await nft.connect(addr2).mint(URI);
+            expect(await nft.tokenCount()).to.equal(2);
+            expect(await nft.balanceOf(addr2.address)).to.equal(1);
+            expect(await nft.tokenURI(2)).to.equal(URI);
+            expect(await nft.royalitypercentage()).to.equal(10)
+        });
+    });
 
-    function addArtists(address payable artists) external {
-        artist.push(artists);
-    }
+    describe("Making Marketplace items", () => {
+        beforeEach(async () => {
+            // addr1 mints an nft
+            await nft.connect(addr1).mint(URI);
+            // addr1 approves marketplace to sell nft
+            await nft
+                .connect(addr1)
+                .setApprovalForAll(marketplace.address, true);
+        });
 
-    function getArtist_i(uint i) view external returns(address payable){
-        return artist[i];
-    }
+        it("Should track newly created item,transfer NFT from seller to markteplace and emit offered item", async () => {
+            await expect(
+                marketplace.connect(addr1).createItem(nft.address, 1, toWei(1))
+            )
+                .to.emit(marketplace, "Offered")
+                .withArgs(1, nft.address, 1, toWei(1), addr1.address);
 
-    function getLength() view external returns(uint){
-        return artist.length;
-    }
+            expect(await nft.ownerOf(1)).to.equal(marketplace.address);
+            expect(await nft.getArtist_i(0)).to.equal(deployer.address)
+            expect(await nft.royalitypercentage()).to.equal(10)
+            expect(await marketplace.itemCount()).to.equal(1);
+            // Get item from items mapping then check fields to ensure they are correct
+            const item = await marketplace.items(1);
+            expect(item.itemId).to.equal(1);
+            expect(item.nft).to.equal(nft.address);
+            expect(item.tokenId).to.equal(1);
+            expect(item.price).to.equal(toWei(1));
+            expect(item.sold).to.equal(false);
+        });
 
-    function mint(string memory _tokenURI) external returns (uint) {
-        tokenCount++;
-        _safeMint(msg.sender, tokenCount);
-        _setTokenURI(tokenCount, _tokenURI);
-        return tokenCount;
-    }
-}
+        it("Should fail if price is set to zero", async function () {
+            await expect(
+                marketplace.connect(addr1).createItem(nft.address, 1, 0)
+            ).to.be.revertedWith("Price must be greater than 0");
+        });
+
+        it("should store the artist and fees of nft", async () => {
+            expect(await nft.getArtist_i(0)).to.equal(deployer.address);
+        });
+    });
+
+    describe("Purchasing marketplace items", () => {
+        let price = 2;
+        let fee = (feepercent / 100) * price;
+        let totalPriceInWei;
+        beforeEach(async function () {
+            // addr1 mints an nft
+            await nft.connect(addr1).mint(URI);
+            // addr1 approves marketplace to spend tokens
+            await nft
+                .connect(addr1)
+                .setApprovalForAll(marketplace.address, true);
+            // addr1 makes their nft a marketplace item.
+            await marketplace
+                .connect(addr1)
+                .createItem(nft.address, 1
+                    , toWei(price));
+        });
+        it("Should update item as sold, pay seller, transfer NFT to buyer, charge fees and emit a Bought event", async () => {
+            const sellerInitalEthBal = await addr1.getBalance();
+            const feeAccountInitialEthBal = await deployer.getBalance();
+            // fetch items total price (market fees + item price)
+            totalPriceInWei = await marketplace.gettotalPrice(1);
+            const royalty_ = price*royalty/100
+            price = price - royalty_
+            // addr 2 purchases item.
+            await expect(
+                marketplace
+                    .connect(addr2)
+                    .purchaseItem(1, { value: totalPriceInWei })
+            )
+                .to.emit(marketplace, "Bought")
+                .withArgs(
+                    1,
+                    nft.address,
+                    1,
+                    toWei(price),
+                    addr1.address,
+                    addr2.address
+                );
+            const sellerFinalEthBal = await addr1.getBalance();
+            const feeAccountFinalEthBal = await deployer.getBalance();
+
+            // Item should be marked as sold
+            expect((await marketplace.items(1)).sold).to.equal(true);
+            
+            expect(Math.round(+fromWei(feeAccountFinalEthBal))).to.equal(
+                Math.round(+fee + +fromWei(feeAccountInitialEthBal))
+            );
+         
+            expect(Math.round(+fromWei((sellerFinalEthBal)))).to.equal(
+                Math.round(+price + +fromWei(sellerInitalEthBal))
+            );
+
+            expect(await nft.ownerOf(1)).to.equal(addr2.address);
+            expect(await nft.getArtist_i(0)).to.equal(deployer.address);
+        });
+        it("Should fail for invalid item ids, sold items and when not enough ether is paid", async () => {
+            // fails for invalid item ids
+            await expect(
+                marketplace
+                    .connect(addr2)
+                    .purchaseItem(2, { value: totalPriceInWei })
+            ).to.be.revertedWith("Item does not exist");
+            await expect(
+                marketplace
+                    .connect(addr2)
+                    .purchaseItem(0, { value: totalPriceInWei })
+            ).to.be.revertedWith("Item does not exist");
+            // Fails when not enough ether is paid with the transaction.
+            // In this instance, fails when buyer only sends enough ether to cover the price of the nft
+            // not the additional market fee.
+            await expect(
+                marketplace
+                    .connect(addr2)
+                    .purchaseItem(1, { value: toWei(price) })
+            ).to.be.revertedWith("Money where");
+            // addr2 purchases item 1
+            await marketplace
+                .connect(addr2)
+                .purchaseItem(1, { value: totalPriceInWei });
+            // addr3 tries purchasing item 1 after its been sold
+            const addr3 = addrs[0];
+            await expect(
+                marketplace
+                    .connect(addr3)
+                    .purchaseItem(1, { value: totalPriceInWei })
+            ).to.be.revertedWith("Item not for sale");
+        });
+    });
+});
