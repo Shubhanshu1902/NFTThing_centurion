@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Container, Row, Col, Button } from "reactstrap";
 import CommonSection from "../components/ui/Common-section/CommonSection";
@@ -8,17 +8,34 @@ import avatar from "../assets/images/ava-01.png";
 
 import "../styles/create-item.css";
 
-const item = {
-  id: "01",
-  title: "Guard",
-  desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
-  imgUrl: img,
-  creator: "Trista Francis",
-  creatorImg: avatar,
-  currentBid: 7.89,
-};
+// var item = {
+//   id: "",
+//   title: "",
+//   desc: "",
+//   imgUrl: img,
+//   creator: "",
+//   creatorImg: avatar,
+//   currentBid: 7.89,
+//   royalty: 0,
+// };
 
 const Create = () => {
+  const [r, setRoyal] = useState('');
+  const [t, setTitle] = useState('');
+  const [d, setDesc] = useState('');
+
+
+  var item = {
+    id: "",
+    title: t,
+    desc: d,
+    imgUrl: img,
+    creator: "Your Name",
+    creatorImg: avatar,
+    currentBid: 0,
+    royalty: r,
+  };
+
   return (
     <>
       <CommonSection title="Create Item" />
@@ -26,10 +43,10 @@ const Create = () => {
       <section>
         <Container>
           <Row>
-            <Col lg="3" md="4" sm="6">
+            {/* <Col lg="3" md="4" sm="6">
               <h5 className="mb-4 text-light">Preview Item</h5>
               <NftCard item={item} />
-            </Col>
+            </Col> */}
 
             <Col lg="9" md="8" sm="6">
               <div className="create__item">
@@ -55,7 +72,7 @@ const Create = () => {
 
                     <div className="form__input w-50">
                       <label htmlFor="">Set Royalty</label>
-                      <input type="number" min="1" max="100" id="myPercent" placeholder="Set royalty" />
+                      <input value={r} type="number" min="1" max="100" id="myPercent" placeholder="Set royalty" onChange={e => setRoyal(e.target.value)} />
                     </div>
                   </div>
 
@@ -73,28 +90,34 @@ const Create = () => {
 
                   <div className="form__input">
                     <label htmlFor="">Title</label>
-                    <input type="text" placeholder="Enter title" />
+                    <input value={t} type="text" placeholder="Enter title" onChange={e => setTitle(e.target.value)} />
                   </div>
 
                   <div className="form__input">
                     <label htmlFor="">Description</label>
                     <textarea
+                      value={d}
                       name=""
                       id=""
                       rows="7"
                       placeholder="Enter description"
                       className="w-100"
+                      onChange={e => setDesc(e.target.value)}
                     ></textarea>
                   </div>
                   <div className="form__input">
                     
                     <Button onClick={()=> {}}>
-                      <label htmlFor="">Submit form</label>
+                      <label htmlFor="">Mint NFT</label>
 
                     </Button>
                   </div>
                 </form>
               </div>
+            </Col>
+            <Col lg="3" md="4" sm="6">
+              <h5 className="mb-4 text-light">Preview Item</h5>
+              <NftCard item={item} />
             </Col>
           </Row>
         </Container>
