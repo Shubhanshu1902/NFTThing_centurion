@@ -10,12 +10,9 @@ import { Container, Row, Col } from "reactstrap";
 
 import "../styles/market.css";
 
-const Profile = () => {
+const Profile = (props) => {
   const [data, setData] = useState(NFT__DATA);
-
-  const handleCategory = () => {};
-
-  const handleItems = () => {};
+  const user  = props.item
 
   // ====== SORTING DATA BY HIGH, MID, LOW RATE =========
   const handleSort = (e) => {
@@ -47,11 +44,39 @@ const Profile = () => {
   return (
     <>
       <CommonSection title={"Profile"} />
-
+        <section>
+            <h1>user name: {user}</h1>
+        </section>
       <section>
       
         <Container>
-            <h1>my nfts</h1>
+            <h1>my Created nfts</h1>
+          <Row>
+            
+            <Col lg="12" className="mb-5">
+                <div className="filter__right">
+                  <select onChange={handleSort}>
+                    <option>Sort By</option>
+                    <option value="high">High Rate</option>
+                    <option value="mid">Mid Rate</option>
+                    <option value="low">Low Rate</option>
+                  </select>
+                </div>
+
+            </Col>
+
+            {data?.map((item) => (
+                item.creator == user ?
+                    <Col lg="3" md="4" sm="6" className="mb-4" key={item.id}>
+                        <NftCard item={item} />
+                    </Col>
+                : ""
+            ))}
+          </Row>
+        </Container>
+
+        <Container>
+            <h1>my Owned nfts</h1>
           <Row>
             
             <Col lg="12" className="mb-5">
