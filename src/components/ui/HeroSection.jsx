@@ -9,7 +9,6 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 import { Environment, OrbitControls } from "@react-three/drei";
 import { useGLTF, OrthographicCamera } from '@react-three/drei'
-import Model from "./model/Scene";
 
 const textpopvariant={
   hidden: {
@@ -27,7 +26,7 @@ const textpopvariant={
 const cubepopvariant={
   hidden: {
       opacity: 0,
-      x : +100
+      x : +100,
   },
   visible: {
       opacity: 1,
@@ -90,6 +89,12 @@ const HeroSection = () => {
             <mesh scale={3}>
               <sphereGeometry radius={40} segments={10} rings={10} />
               <meshNormalMaterial color="#E45C9C" wireframe={true} />
+              
+            </mesh>
+            <mesh scale={1.5}>
+              <sphereGeometry radius={40} segments={10} rings={10} />
+              <meshNormalMaterial color="#E45C9C" wireframe={true} />
+              
             </mesh>
             <ambientLight intensity={1.1}/>
             <directionalLight color={0x89ff45} intensity={1.5}/>
