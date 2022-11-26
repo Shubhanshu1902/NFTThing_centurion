@@ -21,6 +21,10 @@ const NAV__LINKS = [
     display: "Contact",
     url: "/contact",
   },
+  {
+    display: "Profile",
+    url: "/profile",
+  },
 ];
 
 const Header = () => {
