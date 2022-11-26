@@ -21,25 +21,25 @@ const nftcardvariant={
 const STEP__DATA = [
   {
     title: "Setup your wallet",
-    desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Suscipit eligendi, facilis voluptatum fugit illum ",
+    desc: "Connect your metamask wallet to NFTrue to get started!",
     icon: "ri-wallet-line",
   },
 
   {
     title: "Create your collection",
-    desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Suscipit eligendi, facilis voluptatum fugit illum ",
+    desc: "Upload files, put descriptions, royalty percentage and you're all ready to mint your own NFT collections!",
     icon: "ri-layout-masonry-line",
   },
 
   {
     title: "Add your NFTs",
-    desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Suscipit eligendi, facilis voluptatum fugit illum ",
+    desc: "Add NFTs to your collections with ease. NFTrue empowers artists by making royalty to the author de-centralised from the marketplace",
     icon: "ri-image-line",
   },
 
   {
     title: "List them for sale",
-    desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Suscipit eligendi, facilis voluptatum fugit illum ",
+    desc: "List your NFTs and collection for sale on NFTrue Market and get royalty fees on every sale.",
     icon: "ri-list-check",
   },
 ];
