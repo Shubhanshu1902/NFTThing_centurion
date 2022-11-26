@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState , useEffect} from "react";
 import { Container, Row, Col } from "reactstrap";
 import { Link } from "react-router-dom";
+import { useAnimation, motion } from "framer-motion/dist/es/index";
+import { useInView } from "react-intersection-observer";
 import "./hero-section.css";
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
@@ -8,23 +10,59 @@ import { Environment, OrbitControls } from "@react-three/drei";
 import { useGLTF, OrthographicCamera } from '@react-three/drei'
 import Model from "./model/Scene";
 
+const textpopvariant={
+  hidden: {
+      opacity: 0,
+      x : -100
+  },
+  visible: {
+      opacity: 1,
+      x:0,
+      transition: {
+          duration: 1.5
+      },
+  }
+}
+const cubepopvariant={
+  hidden: {
+      opacity: 0,
+      x : +100
+  },
+  visible: {
+      opacity: 1,
+      x:0,
+      transition: {
+          duration: 1.5
+      },
+  }
+}
 
 const HeroSection = () => {
+  const controls = useAnimation();
+  const [ref, inView] = useInView();
+  useEffect(() => {
+      if (inView) {
+      controls.start("visible");
+      }
+  }, [controls, inView]);
+
   return (
     
     <section className="hero__section">
       <Container>
         <Row>
           <Col lg="6" md="6">
-            <div className="hero__content">
+            <motion.div className="hero__content"
+            variants={textpopvariant} 
+            ref={ref}
+            animate={controls}
+            initial="hidden">
               <h2>
                 Discover rare digital art and collect
                 <span>sell extraordinary</span> NFTs
               </h2>
               <p>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                Deleniti excepturi omnis neque adipisci sequi ullam unde in
-                minus quis quos.
+                vaibhav put some text here!
               </p>
 
               <div className="hero__btns d-flex align-items-center gap-4">
@@ -37,19 +75,26 @@ const HeroSection = () => {
                   <Link to="/create">Create</Link>
                 </button>
               </div>
-            </div>
+            </motion.div>
           </Col>
 
           <Col lg="6" md="6">
-
+            <motion.div
+            variants={cubepopvariant} 
+            ref={ref}
+            animate={controls}
+            initial="hidden"
+            >
             <Canvas >
-            <mesh>
+            <mesh scale={3}>
               <boxGeometry />
               <meshStandardMaterial color="#E45C9C" />
             </mesh>
             <ambientLight intensity={1.25}/>
-            <OrbitControls autoRotate />
+            <OrbitControls autoRotate autoRotateSpeed={3}/>
             </Canvas>
+            </motion.div>
+            
           </Col>
         </Row>
       </Container>

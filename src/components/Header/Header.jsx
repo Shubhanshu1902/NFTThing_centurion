@@ -1,7 +1,7 @@
 import React, { useRef, useEffect,useState } from "react";
 import "./header.css";
 import { Container } from "reactstrap";
-
+import logoimg from "../../assets/images/logoflat.png";
 import { NavLink, Link } from "react-router-dom";
 
 const NAV__LINKS = [
@@ -111,14 +111,9 @@ const Header = () => {
     <header className="header" ref={headerRef}>
       <Container>
         <div className="navigation">
-          <div className="logo">
-            <h2 className=" d-flex gap-2 align-items-center ">
-              <span>
-                <i class="ri-fire-fill"></i>
-              </span>
-              NFTs
-            </h2>
-          </div>
+          
+          <img className="profile-photo" src={logoimg} alt={"Carlie Anglemire"} width="15%" length="15%"/>
+          
 
           <div className="nav__menu" ref={menuRef} onClick={toggleMenu}>
             <ul className="nav__list">
@@ -141,12 +136,15 @@ const Header = () => {
             <button className="btn d-flex gap-2 align-items-center" onClick={connectWallet}>
               <span>
                 <i class="ri-wallet-line"></i>
+                <Link>
                 {walletAddress && walletAddress.length > 0
                     ? `Connected: ${walletAddress.substring(
                         0,
                         6
                       )}...${walletAddress.substring(38)}`
                     : "Connect Wallet"}
+                </Link>
+                
               </span>
             </button>
 

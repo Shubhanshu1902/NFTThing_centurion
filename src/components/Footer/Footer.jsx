@@ -67,7 +67,7 @@ const Footer = () => {
     <footer className="footer">
       <Container>
         <Row>
-          <Col lg="3" md="6" sm="6" className="mb-4">
+          {/* <Col lg="3" md="6" sm="6" className="mb-4">
             <div className="logo">
               <h2 className=" d-flex gap-2 align-items-center ">
                 <span>
@@ -146,7 +146,7 @@ const Footer = () => {
                 </Link>
               </span>
             </div>
-          </Col>
+          </Col> */}
 
           <Col lg="12" className=" mt-4 text-center">
             <p className="copyright">
