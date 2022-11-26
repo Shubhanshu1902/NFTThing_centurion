@@ -34,7 +34,7 @@ const Create = () => {
     const [desc, setDesc] = useState("");
 
     var x = NFT__DATA.lastIndexOf();
-    var flag = 0;
+    // var flag = 0;
 
     var item = {
         id: x + 2,
@@ -110,20 +110,37 @@ const Create = () => {
                                             />
                                         </div>
                                     </div>
+                                    <div className=" desc-flex align-items-center gap-4">
+                                        <div className="form__input w-50">
+                                            <label htmlFor="">
+                                                Split royalties
+                                            </label>
+                                            <input type="text" />
+                                        </div>
+
+                                        <div className="form__input">
+                                          <Button outline color="primary">
+                                            <label2 htmlFor="">
+                                              Add
+                                            </label2>
+                                          </Button>
+                                        </div>
+                                    </div>
 
                                     <div className=" desc-flex align-items-center gap-4">
                                         <div className="form__input w-50">
                                             <label htmlFor="">
-                                                Starting Date
+                                                Exclusion List 
                                             </label>
-                                            <input type="date" />
+                                            <input type="text" />
                                         </div>
 
-                                        <div className="form__input w-50">
-                                            <label htmlFor="">
-                                                Expiration Date
-                                            </label>
-                                            <input type="date" />
+                                        <div className="form__input">
+                                          <Button outline color="primary">
+                                            <label2 htmlFor="">
+                                              Add
+                                            </label2>
+                                          </Button>
                                         </div>
                                     </div>
 
@@ -154,8 +171,8 @@ const Create = () => {
                                         ></textarea>
                                     </div>
                                     <div className="form__input">
-                                        <Button onClick={append}>
-                                            <label htmlFor="">Mint NFT</label>
+                                        <Button outline color="primary" onClick={append}>
+                                            <label2 htmlFor="">Mint NFT</label2>
                                         </Button>
                                     </div>
                                 </form>
