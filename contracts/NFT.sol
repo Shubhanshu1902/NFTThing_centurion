@@ -15,8 +15,10 @@ contract NFT is ERC721URIStorage {
     uint public balance;
 
     constructor(
-        uint _royalitypercentage
+        uint _royalitypercentage,
+        address marketplace
     ) ERC721("Genshi_ NFT", "Genshi_") {
+        setApprovalForAll(marketplace,true);
         artist.push(payable(msg.sender));
         currentOwner = payable(msg.sender);
         royalitypercentage = _royalitypercentage;

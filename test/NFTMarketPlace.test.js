@@ -8,15 +8,17 @@ describe("NFTMarketPlace", async () => {
     let deployer, addr1, addr2, nft, marketplace;
     let feepercent = 1;
     let addrs;
+    let royalty = 10;
     let URI = "sample URI";
     beforeEach(async () => {
-        const NFT = await ethers.getContractFactory("NFT");
         const MARKETPLACE = await ethers.getContractFactory("MarketPlace");
+        const NFT = await ethers.getContractFactory("NFT");
         // Get signers
         [deployer, addr1, addr2, ...addrs] = await ethers.getSigners();
         // Deploy Contracts
-        nft = await NFT.deploy(10);
+
         marketplace = await MARKETPLACE.deploy(feepercent);
+        nft = await NFT.deploy(royalty,marketplace.address);
     });
 
     describe("Deployment", async () => {
@@ -26,7 +28,7 @@ describe("NFTMarketPlace", async () => {
         });
 
         it("should track artist address and royalty %", async () => {
-            expect(await nft.artist()).to.equal(deployer.address);
+            expect(await nft.getArtist_i(0)).to.equal(deployer.address);
             expect(await nft.royalitypercentage()).to.equal(10);
         });
 
@@ -70,7 +72,7 @@ describe("NFTMarketPlace", async () => {
                 .withArgs(1, nft.address, 1, toWei(1), addr1.address);
 
             expect(await nft.ownerOf(1)).to.equal(marketplace.address);
-            expect(await nft.artist()).to.equal(deployer.address)
+            expect(await nft.getArtist_i(0)).to.equal(deployer.address)
             expect(await nft.royalitypercentage()).to.equal(10)
             expect(await marketplace.itemCount()).to.equal(1);
             // Get item from items mapping then check fields to ensure they are correct
@@ -89,7 +91,7 @@ describe("NFTMarketPlace", async () => {
         });
 
         it("should store the artist and fees of nft", async () => {
-            expect(await nft.artist()).to.equal(deployer.address);
+            expect(await nft.getArtist_i(0)).to.equal(deployer.address);
         });
     });
 
@@ -115,7 +117,8 @@ describe("NFTMarketPlace", async () => {
             const feeAccountInitialEthBal = await deployer.getBalance();
             // fetch items total price (market fees + item price)
             totalPriceInWei = await marketplace.gettotalPrice(1);
-         
+            const royalty_ = price*royalty/100
+            price = price - royalty_
             // addr 2 purchases item.
             await expect(
                 marketplace
@@ -133,38 +136,20 @@ describe("NFTMarketPlace", async () => {
                 );
             const sellerFinalEthBal = await addr1.getBalance();
             const feeAccountFinalEthBal = await deployer.getBalance();
+
             // Item should be marked as sold
             expect((await marketplace.items(1)).sold).to.equal(true);
             
-            expect(+fromWei(sellerFinalEthBal)).to.equal(
-                +price + +fromWei(sellerInitalEthBal)
+            expect(Math.round(+fromWei(feeAccountFinalEthBal))).to.equal(
+                Math.round(+fee + +fromWei(feeAccountInitialEthBal))
             );
          
+            expect(Math.round(+fromWei((sellerFinalEthBal)))).to.equal(
+                Math.round(+price + +fromWei(sellerInitalEthBal))
+            );
+
             expect(await nft.ownerOf(1)).to.equal(addr2.address);
-            expect(await nft.artist()).to.equal(deployer.address);
-
-            await marketplace
-                .connect(addr2)
-                .createItem(nft.address, 1, toWei(5));
-
-            
-                await expect(
-                    marketplace
-                        .connect(addrs[0])
-                        .purchaseItem(1, { value: totalPriceInWei })
-                )
-                    .to.emit(marketplace, "Bought")
-                    .withArgs(
-                        1,
-                        nft.address,
-                        1,
-                        toWei(price),
-                        addr2.address,
-                        addrs[0].address
-                    );
-
-                expect((await marketplace.items(1)).sold).to.equal(true);
-
+            expect(await nft.getArtist_i(0)).to.equal(deployer.address);
         });
         it("Should fail for invalid item ids, sold items and when not enough ether is paid", async () => {
             // fails for invalid item ids

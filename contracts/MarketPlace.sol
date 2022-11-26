@@ -59,11 +59,8 @@ contract MarketPlace is ReentrancyGuard {
     ) external nonReentrant {
         require(_price > 0, "Price must be greater than 0");
         itemCount++;
-        NFT nft_tobeCreated = NFT(address(_nft));
-        nft_tobeCreated.approve(msg.sender,_tokenId);
         // require(msg.sender == nft_tobeCreated.currentOwner(),"Wrong Owner");
         _nft.transferFrom(msg.sender, address(this), _tokenId);
-        nft_tobeCreated.setOwner(payable(msg.sender));
 
         items[itemCount] = Item(
             itemCount,
@@ -75,7 +72,7 @@ contract MarketPlace is ReentrancyGuard {
         );
 
         emit Offered(itemCount, address(_nft), _tokenId, _price, msg.sender);
-        nft_created[nft_tobeCreated.currentOwner()].push(address(_nft));
+        nft_created[_nft.ownerOf(_tokenId)].push(address(_nft));
     }
 
     function purchaseItem(uint _itemId) external payable nonReentrant {
@@ -85,8 +82,6 @@ contract MarketPlace is ReentrancyGuard {
         require(msg.value >= totalPrice, "Money where");
         require(!item.sold, "Item not for sale");
 
-        // Transfer the nft ownership
-        // Converting the interger value into bytes and the bytes value will be converted back to integer to calculate the transaction amount.
         address nftAddress = address(item.nft);
         NFT nft_token = NFT(nftAddress);
 
@@ -107,14 +102,14 @@ contract MarketPlace is ReentrancyGuard {
         item.sold = true;
         uint price = msg.value - totalPrice;
         payable(msg.sender).transfer(price);
-        console.log(nft_token.currentOwner());
+        // console.log(nft_token.currentOwner());
         item.nft.safeTransferFrom(address(this), msg.sender, item.tokenId);
         emit Bought(
             _itemId,
             address(item.nft),
             item.tokenId,
             item.price,
-            nft_token.currentOwner(),
+            item.seller,
             msg.sender
         );
         nft_token.setOwner(payable(msg.sender));
@@ -132,4 +127,32 @@ contract MarketPlace is ReentrancyGuard {
     function getAllOwnedNFTs() public view returns (address[] memory) {
         return nft_owned[msg.sender];
     }
+
+    // struct Item {
+    //     uint itemId; //Id of the item
+    //     IERC721 nft; //instance of nft contract
+    //     uint tokenId; //Token Id
+    //     uint price; //price of the nft
+    //     address payable seller; // Seller address
+    //     bool sold; // True if sold else false
+    // }
+
+    function resell(IERC721 _nft,
+        uint _tokenId,
+        uint _price,uint itemId)external nonReentrant {
+            require(itemId>0 && itemId<= itemCount,"No such item exists");
+            require(_price > 0, "Price must be greater than 0");
+            address owner = _nft.ownerOf(_tokenId);
+            require(msg.sender == owner,"Wrong Owner");
+            
+            // _nft.ApprovalForAll(msg.sender,true);
+            _nft.safeTransferFrom(msg.sender, address(this), _tokenId);
+
+            items[itemId].price = _price;
+            items[itemId].seller = payable(owner);
+            items[itemId].sold = false;
+
+            emit Offered(itemId, address(_nft), _tokenId, _price, msg.sender);
+
+        }
 }
